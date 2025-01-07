@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:trekntread/Model/banner.dart';
+import 'package:trekntread/Model/mock_products.dart';
 import 'package:trekntread/Model/product.dart';
 import 'package:trekntread/View/screen/cart_screen.dart';
 import 'package:trekntread/View/screen/menu_screen.dart';
@@ -249,16 +250,12 @@ class HomeScreenContent extends StatelessWidget {
                   child: SizedBox(
                     width: 150, // Adjusted width
                     child: ProductCard(
-                      product: Product(
-                        name: 'Air Force 1',
-                        price: 2290,
-                        originalPrice: 2690,
-                        imageUrl:
-                            'https://trekntread.com/tenancy/assets/636/photo1709618571.jpeg',
-                        discount: 15,
-                      ),
-                      onAddToCart: () {},
-                    ),
+              product: mockProducts[index], // Pass individual product
+              onAddToCart: () {
+                // Implement your cart functionality here
+                print('Added ${mockProducts[index].name} to cart');
+              },
+            )
                   ),
                 );
               },
@@ -270,53 +267,48 @@ class HomeScreenContent extends StatelessWidget {
   }
 
   // Y O U   M A Y  A L S O   L I K E
-
-  Widget buildYouMayAlsoLoveSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            'You May Also Love',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+Widget buildYouMayAlsoLoveSection() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.all(16),
+        child: Text(
+          'You May Also Love',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.6, // Adjusted for better product card fit
-            ),
-            itemCount: 6,
-            itemBuilder: (context, index) {
-              return ProductCard(
-                product: Product(
-                  name: 'Air Force 1',
-                  price: 2290,
-                  originalPrice: 2690,
-                  imageUrl:
-                      'https://trekntread.com/tenancy/assets/636/photo1709618571.jpeg',
-                  discount: 15,
-                ),
-                onAddToCart: () {},
-              );
-            },
+      ),
+      const SizedBox(height: 16),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.6, // Adjusted for better product card fit
           ),
+          itemCount: mockProducts.length, // Use mock data length
+          itemBuilder: (context, index) {
+            return ProductCard(
+              product: mockProducts[index], // Pass individual product
+              onAddToCart: () {
+                // Implement your cart functionality here
+                print('Added ${mockProducts[index].name} to cart');
+              },
+            );
+          },
         ),
-        const SizedBox(height: 16),
-      ],
-    );
-  }
+      ),
+      const SizedBox(height: 16),
+    ],
+  );
+}
 
 // Update buildCategoriesSection() method:
 
@@ -393,3 +385,91 @@ class HomeScreenContent extends StatelessWidget {
 
 
 //  F I X E D      F I L E S-------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Widget buildYouMayAlsoLoveSection() {
+//   final productService = ProductService();
+
+//   return FutureBuilder<List<Product>>(
+//     future: productService.fetchProducts(),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return const Center(child: CircularProgressIndicator());
+//       } else if (snapshot.hasError) {
+//         return const Center(child: Text('Failed to load products'));
+//       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+//         return const Center(child: Text('No products available'));
+//       }
+
+//       final products = snapshot.data!;
+
+//       return Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           const Padding(
+//             padding: EdgeInsets.all(16),
+//             child: Text(
+//               'You May Also Love',
+//               style: TextStyle(
+//                 fontSize: 18,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 16),
+//             child: GridView.builder(
+//               physics: const NeverScrollableScrollPhysics(),
+//               shrinkWrap: true,
+//               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                 crossAxisCount: 2,
+//                 crossAxisSpacing: 16,
+//                 mainAxisSpacing: 16,
+//                 childAspectRatio: 0.6,
+//               ),
+//               itemCount: products.length,
+//               itemBuilder: (context, index) {
+//                 return ProductCard(
+//                   product: products[index],
+//                   onAddToCart: () {
+//                     print('Added ${products[index].name} to cart');
+//                   },
+//                 );
+//               },
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+//         ],
+//       );
+//     },
+//   );
+// }
