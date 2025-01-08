@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:trekntread/Model/banner.dart';
 import 'package:trekntread/Model/mock_products.dart';
-import 'package:trekntread/Model/product.dart';
 import 'package:trekntread/View/screen/cart_screen.dart';
 import 'package:trekntread/View/screen/menu_screen.dart';
+import 'package:trekntread/View/screen/product_listing_screen.dart' as listing;
 import 'package:trekntread/View/screen/profile.dart';
 import 'package:trekntread/View/widget/auto_scroll_banner.dart';
 import 'package:trekntread/View/widget/category_item.dart';
@@ -23,23 +23,22 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0; // Tracks the currently selected index
   String selectedCategory = 'All';
 
- // Update your pages list to use a getter instead of a final field
+  // Update your pages list to use a getter instead of a final field
   List<Widget> get _pages => [
-    HomeScreenContent(
-      selectedCategory: selectedCategory,
-      categories: categories,
-      onCategoryChanged: handleCategoryChange,
-    ),
-    const MenuScreen(),
-    const CartScreen(),
-    const ProfileScreen(),
-  ];
+        HomeScreenContent(
+          selectedCategory: selectedCategory,
+          categories: categories,
+          onCategoryChanged: handleCategoryChange,
+        ),
+        const MenuScreen(),
+        const CartScreen(),
+        const ProfileScreen(),
+      ];
 
-  
   final List<String> categories = [
     'All',
     'Sneakers',
-    'Running', 
+    'Running',
     'Basketball',
     'Casual',
   ];
@@ -76,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
-        child: _currentIndex == 0 
+        child: _currentIndex == 0
             ? HomeScreenContent(
                 selectedCategory: selectedCategory,
                 categories: categories,
@@ -248,15 +247,14 @@ class HomeScreenContent extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: SizedBox(
-                    width: 150, // Adjusted width
-                    child: ProductCard(
-              product: mockProducts[index], // Pass individual product
-              onAddToCart: () {
-                // Implement your cart functionality here
-                print('Added ${mockProducts[index].name} to cart');
-              },
-            )
-                  ),
+                      width: 150, // Adjusted width
+                      child: ProductCard(
+                        product: mockProducts[index], // Pass individual product
+                        onAddToCart: () {
+                          // Implement your cart functionality here
+                          print('Added ${mockProducts[index].name} to cart');
+                        },
+                      )),
                 );
               },
             ),
@@ -267,51 +265,50 @@ class HomeScreenContent extends StatelessWidget {
   }
 
   // Y O U   M A Y  A L S O   L I K E
-Widget buildYouMayAlsoLoveSection() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Padding(
-        padding: EdgeInsets.all(16),
-        child: Text(
-          'You May Also Love',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+  Widget buildYouMayAlsoLoveSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            'You May Also Love',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      const SizedBox(height: 16),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: GridView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.6, // Adjusted for better product card fit
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 0.6, // Adjusted for better product card fit
+            ),
+            itemCount: mockProducts.length, // Use mock data length
+            itemBuilder: (context, index) {
+              return ProductCard(
+                product: mockProducts[index], // Pass individual product
+                onAddToCart: () {
+                  // Implement your cart functionality here
+                  print('Added ${mockProducts[index].name} to cart');
+                },
+              );
+            },
           ),
-          itemCount: mockProducts.length, // Use mock data length
-          itemBuilder: (context, index) {
-            return ProductCard(
-              product: mockProducts[index], // Pass individual product
-              onAddToCart: () {
-                // Implement your cart functionality here
-                print('Added ${mockProducts[index].name} to cart');
-              },
-            );
-          },
         ),
-      ),
-      const SizedBox(height: 16),
-    ],
-  );
-}
+        const SizedBox(height: 16),
+      ],
+    );
+  }
 
-// Update buildCategoriesSection() method:
-
+// In buildCategoriesSection() method, update the CategoryItem:
   Widget buildCategoriesSection(BuildContext context) {
     final List<Map<String, String>> categories = [
       {'icon': 'assets/images/all.png', 'label': 'All products'},
@@ -340,7 +337,15 @@ Widget buildYouMayAlsoLoveSection() {
               ),
               TextButton(
                 onPressed: () {
-                  // Handle see all
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const listing.ProductListingScreen(
+                        category: 'All',
+                        brand: '',
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('See all'),
               ),
@@ -348,8 +353,7 @@ Widget buildYouMayAlsoLoveSection() {
           ),
           const SizedBox(height: 16),
           SizedBox(
-            height: MediaQuery.of(context).size.width *
-                0.65, // Adjust height based on screen width
+            height: MediaQuery.of(context).size.width * 0.65,
             child: PageView.builder(
               itemCount: (categories.length / 6).ceil(),
               itemBuilder: (context, pageIndex) {
@@ -369,7 +373,15 @@ Widget buildYouMayAlsoLoveSection() {
                       icon: category['icon']!,
                       label: category['label']!,
                       onTap: () {
-                        // Handle category tap
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => listing.ProductListingScreen(
+                              category: category['label']!,
+                              brand: '',
+                            ),
+                          ),
+                        );
                       },
                     );
                   },
@@ -383,37 +395,7 @@ Widget buildYouMayAlsoLoveSection() {
   }
 }
 
-
 //  F I X E D      F I L E S-------------->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Widget buildYouMayAlsoLoveSection() {
 //   final productService = ProductService();
